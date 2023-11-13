@@ -1,0 +1,15 @@
+export 'package:inventory_app/presentation/screens/home/categorizacion.dart';
+export 'package:inventory_app/presentation/screens/productos/view_productos.dart';
+export 'package:inventory_app/presentation/screens/perfil/update_perfil.dart';
+export 'package:inventory_app/presentation/screens/perfil/perfil.dart';
+export 'package:inventory_app/presentation/screens/home/categorias.dart';
+export 'package:inventory_app/presentation/screens/categorias/add_categoria.dart';
+export 'package:inventory_app/presentation/screens/productos/add_producto.dart';
+export 'package:inventory_app/presentation/screens/categorias/update_categoria.dart';
+export 'package:inventory_app/presentation/screens/productos/update_producto.dart';
+export 'package:inventory_app/presentation/screens/home/nav/nav.dart';
+export 'package:inventory_app/presentation/screens/categorias/view_categorias.dart';
+export 'package:inventory_app/presentation/screens/home/productos.dart';
+export 'package:inventory_app/presentation/screens/login/forget_password/forget_pass.dart';
+export 'package:inventory_app/presentation/screens/login/forget_password/forget_pass_name.dart';
+export 'package:inventory_app/presentation/screens/login/login.dart';
