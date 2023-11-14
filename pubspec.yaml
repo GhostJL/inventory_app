@@ -12,6 +12,7 @@ dependencies:
   google_fonts: ^4.0.4
   image_picker: ^1.0.4
   shared_preferences: ^2.2.2
+  simple_barcode_scanner: ^0.0.8
   sqflite: ^2.2.8+4
 
 dev_dependencies:

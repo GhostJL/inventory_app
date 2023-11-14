@@ -25,7 +25,10 @@ class _ViewCategoriasState extends State<ViewCategorias> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UpdateCategoria()),
+                        builder: (context) => UpdateCategoria(
+                          nameCategoria: name,
+                        ),
+                      ),
                     );
                   },
                   icon: Icon(Icons.edit)),
