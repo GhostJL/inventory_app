@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
+import 'package:inventory_app/services/controllers_manager.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class AddProducto extends StatefulWidget {
   const AddProducto({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class AddProducto extends StatefulWidget {
 }
 
 class _AddProductoState extends State<AddProducto> {
+  final controllerManager = ControllerManager();
   String? _selectedOption = 'Selecciona una familia';
   List<String> list = <String>[
     'Selecciona una familia',
@@ -21,6 +24,7 @@ class _AddProductoState extends State<AddProducto> {
   ];
   @override
   Widget build(BuildContext context) {
+    final barcodeController = controllerManager.codeController;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -42,6 +46,7 @@ class _AddProductoState extends State<AddProducto> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: barcodeController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -53,7 +58,23 @@ class _AddProductoState extends State<AddProducto> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           FilledButton.icon(
-                            onPressed: () {},
+                            onPressed: () async {
+                              var res = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SimpleBarcodeScannerPage(),
+                                ),
+                              );
+                              setState(
+                                () {
+                                  if (res is String) {
+                                    barcodeController.text = res;
+                                    print("Codigo ${barcodeController.text}");
+                                  }
+                                },
+                              );
+                            },
                             icon: Icon(Icons.barcode_reader),
                             label: Text("Escanea"),
                             style: ButtonStyle(
@@ -61,7 +82,7 @@ class _AddProductoState extends State<AddProducto> {
                                 Color(0xFF3333FF),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       )
                     ],
