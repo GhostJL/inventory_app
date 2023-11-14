@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
 
 class ViewCategorias extends StatefulWidget {
-  const ViewCategorias({Key? key}) : super(key: key);
+  final String nameCategoria;
+  const ViewCategorias({Key? key, required this.nameCategoria})
+      : super(key: key);
 
   @override
   _ViewCategoriasState createState() => _ViewCategoriasState();
@@ -11,6 +13,7 @@ class ViewCategorias extends StatefulWidget {
 class _ViewCategoriasState extends State<ViewCategorias> {
   @override
   Widget build(BuildContext context) {
+    final name = widget.nameCategoria;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -37,7 +40,7 @@ class _ViewCategoriasState extends State<ViewCategorias> {
                   TextFormField(
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    initialValue: "Herramientas",
+                    initialValue: name,
                     enabled: false,
                     decoration: InputDecoration(
                         filled: true, labelText: "Nombre de la categoria"),

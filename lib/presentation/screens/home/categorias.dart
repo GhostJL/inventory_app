@@ -228,7 +228,11 @@ class _CategoriesItem extends StatelessWidget {
       //Agregado
       onLongPress: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ViewCategorias()),
+        MaterialPageRoute(
+          builder: (context) => ViewCategorias(
+            nameCategoria: categoriesItem.name,
+          ),
+        ),
       ),
     );
   }
