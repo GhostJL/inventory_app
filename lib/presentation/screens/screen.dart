@@ -1,4 +1,4 @@
-export 'package:inventory_app/presentation/screens/home/categorizacion.dart';
+export 'package:inventory_app/presentation/screens/home/categorizacion/categorizacion.dart';
 export 'package:inventory_app/presentation/screens/productos/view_productos.dart';
 export 'package:inventory_app/presentation/screens/perfil/update_perfil.dart';
 export 'package:inventory_app/presentation/screens/perfil/perfil.dart';

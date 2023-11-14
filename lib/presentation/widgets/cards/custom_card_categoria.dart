@@ -5,7 +5,7 @@ class CustomCardCategoria extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
-  const CustomCardCategoria({
+  CustomCardCategoria({
     Key? key,
     required this.nombre,
     this.onTap,
@@ -22,8 +22,8 @@ class CustomCardCategoria extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: onTap ?? () {},
-        onLongPress: onLongPress ?? () {},
+        onTap: onTap,
+        onLongPress: onLongPress,
         child: Container(
           margin: EdgeInsets.fromLTRB(36, 36, 36, 36),
           child: Center(
@@ -37,44 +37,6 @@ class CustomCardCategoria extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class ListaDeCustomCardCategoria extends StatefulWidget {
-  final List<String> categoryNames;
-  final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
-
-  ListaDeCustomCardCategoria({
-    required this.categoryNames,
-    this.onTap,
-    this.onLongPress,
-  });
-
-  @override
-  _ListaDeCustomCardCategoriaState createState() =>
-      _ListaDeCustomCardCategoriaState();
-}
-
-class _ListaDeCustomCardCategoriaState
-    extends State<ListaDeCustomCardCategoria> {
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 2,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
-      ),
-      itemCount: widget.categoryNames.length,
-      itemBuilder: (context, index) {
-        return CustomCardCategoria(
-          nombre: widget.categoryNames[index],
-          onTap: widget.onTap,
-          onLongPress: widget.onLongPress,
-        );
-      },
     );
   }
 }
