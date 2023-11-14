@@ -3,7 +3,9 @@ import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
 
 class Categorizacion extends StatefulWidget {
-  const Categorizacion({Key? key}) : super(key: key);
+  final String nameCategoria;
+  const Categorizacion({Key? key, required this.nameCategoria})
+      : super(key: key);
 
   @override
   _CategorizacionState createState() => _CategorizacionState();
@@ -12,6 +14,8 @@ class Categorizacion extends StatefulWidget {
 class _CategorizacionState extends State<Categorizacion> {
   @override
   Widget build(BuildContext context) {
+    final name = widget.nameCategoria;
+    print(name);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -19,7 +23,7 @@ class _CategorizacionState extends State<Categorizacion> {
             leading: IconButton(
                 icon: const Icon(Icons.search_rounded), onPressed: () {}),
             centerTitle: true,
-            title: Text("Categoría"),
+            title: Text("Categorías"),
             actions: [
               IconButton(
                 icon: const Icon(Icons.person_2_rounded),
@@ -38,7 +42,7 @@ class _CategorizacionState extends State<Categorizacion> {
                 Column(
                   children: [
                     Text(
-                      "Herramientas",
+                      name,
                       style: TextStyle(
                         color: Color(0xFF9198AB),
                       ),

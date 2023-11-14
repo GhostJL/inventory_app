@@ -219,7 +219,11 @@ class _CategoriesItem extends StatelessWidget {
       nombre: categoriesItem.name,
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Categorizacion()),
+        MaterialPageRoute(
+          builder: (context) => Categorizacion(
+            nameCategoria: categoriesItem.name,
+          ),
+        ),
       ),
       //Agregado
       onLongPress: () => Navigator.push(
