@@ -113,6 +113,9 @@ class _CategoriasState extends State<Categorias> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                            childAspectRatio: 1.8,
                           ),
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {

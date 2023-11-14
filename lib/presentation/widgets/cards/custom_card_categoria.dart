@@ -17,7 +17,7 @@ class CustomCardCategoria extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       color: Colors.grey.shade50,
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.fromLTRB(16, 0, 8, 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -25,7 +25,9 @@ class CustomCardCategoria extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         child: Container(
-          margin: EdgeInsets.fromLTRB(36, 36, 36, 36),
+          height: 100,
+          width: double.infinity,
+          margin: EdgeInsets.all(16),
           child: Center(
             child: Text(
               nombre,
