@@ -76,6 +76,12 @@ class MyData {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<void> insertProducts(ProductsItems item) async {
+    final db = await instance.database;
+    await db.insert(tableProducts, item.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
   //Consultar datos
   Future<bool> verifyUserCredentials(String username, String password) async {
     final db = await instance.database;

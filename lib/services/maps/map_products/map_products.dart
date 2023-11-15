@@ -1,27 +1,27 @@
-class ProdutsItems {
+class ProductsItems {
   final String image;
-  final int numSerie;
-  final String categoria;
-  final String nombre;
-  final int cantidad;
-  final double precio;
+  final int serialNumber;
+  final String category;
+  final String name;
+  final int quantity;
+  final double price;
 
-  ProdutsItems(
+  ProductsItems(
       {required this.image,
-      required this.numSerie,
-      required this.categoria,
-      required this.nombre,
-      required this.cantidad,
-      required this.precio});
+      required this.serialNumber,
+      required this.category,
+      required this.name,
+      required this.quantity,
+      required this.price});
 
   Map<String, dynamic> toMap() {
     return {
       'image': image,
-      'numSerie': numSerie,
-      'categoria': categoria,
-      'nombre': nombre,
-      'cantidad': cantidad,
-      'precio': precio,
+      'serialNumber': serialNumber,
+      'category': category,
+      'name': name,
+      'quantity': quantity,
+      'price': price,
     };
   }
 }

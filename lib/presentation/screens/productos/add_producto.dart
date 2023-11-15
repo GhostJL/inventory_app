@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
+import 'package:inventory_app/services/bd.dart';
 import 'package:inventory_app/services/controllers_manager.dart';
+import 'package:inventory_app/services/maps/maps.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class AddProducto extends StatefulWidget {
@@ -13,6 +15,19 @@ class AddProducto extends StatefulWidget {
 
 class _AddProductoState extends State<AddProducto> {
   final controllerManager = ControllerManager();
+
+  Future<void> addProduct(String image, int serialNumber, String category,
+      String name, int quantity, double price) async {
+    final item = ProductsItems(
+        image: image,
+        serialNumber: serialNumber,
+        category: category,
+        name: name,
+        quantity: quantity,
+        price: price);
+    await MyData.instance.insertProducts(item);
+  }
+
   String? _selectedOption = 'Selecciona una familia';
   List<String> list = <String>[
     'Selecciona una familia',
@@ -24,7 +39,16 @@ class _AddProductoState extends State<AddProducto> {
   ];
   @override
   Widget build(BuildContext context) {
-    final barcodeController = controllerManager.codeController;
+    final String image = controllerManager.imagePController.text;
+    final int numSerie =
+        int.tryParse(controllerManager.numSeriePController.text) ?? 0;
+    final String categoria = controllerManager.categoriePController.text;
+    final String nombre = controllerManager.namePController.text;
+    final int cantidad =
+        int.tryParse(controllerManager.cantidadPController.text) ?? 0;
+    final double precio =
+        double.tryParse(controllerManager.pricePController.text) ?? 0.00;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -38,6 +62,7 @@ class _AddProductoState extends State<AddProducto> {
                 children: [
                   CustomCardAdd(
                     onImageSelected: (imagePath) {
+                      controllerManager.imagePController.text = imagePath;
                       debugPrint('Ruta de la imagen: $imagePath');
                     },
                   ),
@@ -46,7 +71,7 @@ class _AddProductoState extends State<AddProducto> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          controller: barcodeController,
+                          controller: controllerManager.codeController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -69,8 +94,9 @@ class _AddProductoState extends State<AddProducto> {
                               setState(
                                 () {
                                   if (res is String) {
-                                    barcodeController.text = res;
-                                    print("Codigo ${barcodeController.text}");
+                                    controllerManager.codeController.text = res;
+                                    print(
+                                        "Codigo ${controllerManager.codeController.text}");
                                   }
                                 },
                               );
@@ -103,7 +129,7 @@ class _AddProductoState extends State<AddProducto> {
                     }).toList(),
                     onChanged: (newValue) {
                       setState(() {
-                        _selectedOption = newValue;
+                        controllerManager.categoriePController.text = newValue!;
                       });
                     },
                     decoration: InputDecoration(
@@ -112,6 +138,7 @@ class _AddProductoState extends State<AddProducto> {
                   ),
                   SizedBox(height: 32),
                   TextFormField(
+                    controller: controllerManager.namePController,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
                     decoration:
@@ -122,6 +149,7 @@ class _AddProductoState extends State<AddProducto> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: controllerManager.cantidadPController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -133,6 +161,7 @@ class _AddProductoState extends State<AddProducto> {
                       SizedBox(width: 16),
                       Expanded(
                         child: TextFormField(
+                          controller: controllerManager.pricePController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             filled: true,
@@ -149,6 +178,18 @@ class _AddProductoState extends State<AddProducto> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
+                        addProduct(image, numSerie, categoria, nombre, cantidad,
+                            precio);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                            content: Text('Producto registrado'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Nav()),
