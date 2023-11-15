@@ -121,19 +121,6 @@ class _ViewProductosState extends State<ViewProductos> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 60),
-                  Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Nav()),
-                        );
-                      },
-                      child: Text("Guardar"),
-                    ),
-                  ),
                 ],
               ),
             ),

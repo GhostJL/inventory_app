@@ -122,6 +122,21 @@ class MyData {
     });
   }
 
+  Future<List<ProductsItems>> getAllItemsProds() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query(tableProducts);
+
+    return List.generate(maps.length, (i) {
+      return ProductsItems(
+          image: maps[i]['image'],
+          serialNumber: maps[i]['serialNumber'],
+          category: maps[i]['category'],
+          name: maps[i]['name'],
+          quantity: maps[i]['quantity'],
+          price: maps[i]['price']);
+    });
+  }
+
   //Actualizar datos
   Future<int> updateProfile(String username, String newPassword) async {
     final db = await instance.database;

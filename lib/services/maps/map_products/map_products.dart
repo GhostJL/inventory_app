@@ -1,6 +1,6 @@
 class ProductsItems {
   final String image;
-  final int serialNumber;
+  final String serialNumber;
   final String category;
   final String name;
   final int quantity;

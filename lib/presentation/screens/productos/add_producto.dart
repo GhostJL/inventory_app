@@ -16,7 +16,7 @@ class AddProducto extends StatefulWidget {
 class _AddProductoState extends State<AddProducto> {
   final controllerManager = ControllerManager();
 
-  Future<void> addProduct(String image, int serialNumber, String category,
+  Future<void> addProduct(String image, String serialNumber, String category,
       String name, int quantity, double price) async {
     final item = ProductsItems(
         image: image,
@@ -39,16 +39,6 @@ class _AddProductoState extends State<AddProducto> {
   ];
   @override
   Widget build(BuildContext context) {
-    final String image = controllerManager.imagePController.text;
-    final int numSerie =
-        int.tryParse(controllerManager.numSeriePController.text) ?? 0;
-    final String categoria = controllerManager.categoriePController.text;
-    final String nombre = controllerManager.namePController.text;
-    final int cantidad =
-        int.tryParse(controllerManager.cantidadPController.text) ?? 0;
-    final double precio =
-        double.tryParse(controllerManager.pricePController.text) ?? 0.00;
-
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -71,7 +61,7 @@ class _AddProductoState extends State<AddProducto> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          controller: controllerManager.codeController,
+                          controller: controllerManager.numSeriePController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -178,8 +168,19 @@ class _AddProductoState extends State<AddProducto> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        addProduct(image, numSerie, categoria, nombre, cantidad,
-                            precio);
+                        addProduct(
+                          controllerManager.imagePController.text,
+                          controllerManager.numSeriePController.text,
+                          controllerManager.categoriePController.text,
+                          controllerManager.namePController.text,
+                          int.tryParse(
+                                  controllerManager.cantidadPController.text) ??
+                              0,
+                          double.tryParse(
+                                  controllerManager.pricePController.text) ??
+                              0.0,
+                        );
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             duration: Duration(seconds: 2),

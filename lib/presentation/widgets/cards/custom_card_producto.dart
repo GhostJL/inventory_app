@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class CustomCardProducto extends StatelessWidget {
@@ -21,7 +23,7 @@ class CustomCardProducto extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       color: Colors.grey.shade50,
-      margin: EdgeInsets.all(16),
+      margin: EdgeInsets.fromLTRB(16, 8, 16, 0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
       ),
@@ -36,8 +38,8 @@ class CustomCardProducto extends StatelessWidget {
                 height: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    direccionImagen,
+                  child: Image.file(
+                    File(direccionImagen),
                     width: 80,
                     height: 80,
                   ),
@@ -57,9 +59,9 @@ class CustomCardProducto extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Cantidad $cantidad',
+                      'Disponibles $cantidad',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Color(0xFF79747E),
                       ),
                     ),
