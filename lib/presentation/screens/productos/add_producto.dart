@@ -16,6 +16,34 @@ class AddProducto extends StatefulWidget {
 class _AddProductoState extends State<AddProducto> {
   final controllerManager = ControllerManager();
 
+  String? _selectedOption;
+  List<String> _categorias = ['Selecciona una categoría'];
+  @override
+  void initState() {
+    super.initState();
+    cargarCategoriasDesdeBaseDeDatos();
+  }
+
+  Future<void> cargarCategoriasDesdeBaseDeDatos() {
+    return MyData.instance
+        .getAllItemsCat()
+        .then((List<CategoriesItem> categoriasLista) {
+      List<String> nombresCategorias =
+          categoriasLista.map((categoria) => categoria.name).toList();
+
+      setState(() {
+        _categorias.addAll(nombresCategorias);
+        if (_categorias.isNotEmpty) {
+          _selectedOption = _categorias[0];
+        } else {
+          print("No se obtuvieron las categorias");
+        }
+      });
+    }).catchError((error) {
+      print('Error al cargar categorías: $error');
+    });
+  }
+
   Future<void> addProduct(String image, String serialNumber, String category,
       String name, int quantity, double price) async {
     final item = ProductsItems(
@@ -28,15 +56,6 @@ class _AddProductoState extends State<AddProducto> {
     await MyData.instance.insertProducts(item);
   }
 
-  String? _selectedOption = 'Selecciona una familia';
-  List<String> list = <String>[
-    'Selecciona una familia',
-    'Plomeria',
-    'Construcción',
-    'Herramientas',
-    'Refacción',
-    'Pisos'
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +126,7 @@ class _AddProductoState extends State<AddProducto> {
                   SizedBox(height: 32),
                   DropdownButtonFormField<String>(
                     value: _selectedOption,
-                    items: list.map((option) {
+                    items: _categorias.map((option) {
                       return DropdownMenuItem<String>(
                         value: option,
                         child: Text(
@@ -169,33 +188,54 @@ class _AddProductoState extends State<AddProducto> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        addProduct(
-                          controllerManager.imagePController.text,
-                          controllerManager.numSeriePController.text,
-                          controllerManager.categoriePController.text,
-                          controllerManager.namePController.text,
-                          int.tryParse(
-                                  controllerManager.cantidadPController.text) ??
-                              0,
-                          double.tryParse(
-                                  controllerManager.pricePController.text) ??
-                              0.0,
-                        );
+                        if (controllerManager.categoriePController.text ==
+                            'Selecciona una categoría') {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Advertencia'),
+                                content: Text(
+                                    'Selecciona una opción válida antes de continuar.'),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          print(controllerManager.categoriePController);
+                          addProduct(
+                            controllerManager.imagePController.text,
+                            controllerManager.numSeriePController.text,
+                            controllerManager.categoriePController.text,
+                            controllerManager.namePController.text,
+                            int.tryParse(controllerManager
+                                    .cantidadPController.text) ??
+                                0,
+                            double.tryParse(
+                                    controllerManager.pricePController.text) ??
+                                0.0,
+                          );
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            duration: Duration(seconds: 2),
-                            behavior: SnackBarBehavior.floating,
-                            content: Text('Producto registrado'),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              duration: Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text('Producto registrado'),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
                             ),
-                          ),
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Nav()),
-                        );
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Nav()),
+                          );
+                        }
                       },
                       child: Text("Guardar"),
                     ),
