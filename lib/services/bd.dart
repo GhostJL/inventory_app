@@ -156,4 +156,12 @@ class MyData {
       whereArgs: [username],
     );
   }
+
+  Future<int> updateCategory(String newCategory) async {
+    final db = await instance.database;
+    return await db.update(
+      tableCategories,
+      {'name': newCategory},
+    );
+  }
 }

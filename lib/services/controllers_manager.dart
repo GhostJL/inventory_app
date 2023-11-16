@@ -11,6 +11,7 @@ class ControllerManager {
   final TextEditingController namePController = TextEditingController();
   final TextEditingController cantidadPController = TextEditingController();
   final TextEditingController pricePController = TextEditingController();
+  final TextEditingController newCategory = TextEditingController();
 
   void dispose() {
     usernameController.dispose();
@@ -23,5 +24,6 @@ class ControllerManager {
     namePController.dispose();
     cantidadPController.dispose();
     pricePController.dispose();
+    newCategory.dispose();
   }
 }

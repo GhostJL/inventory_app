@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
+import 'package:inventory_app/services/bd.dart';
+import 'package:inventory_app/services/controllers_manager.dart';
 
 class UpdateCategoria extends StatefulWidget {
   final String nameCategoria;
@@ -11,9 +13,19 @@ class UpdateCategoria extends StatefulWidget {
 }
 
 class _UpdateCategoriaState extends State<UpdateCategoria> {
+  final controllerManager = ControllerManager();
+  late final MyData db;
+
+  @override
+  void initState() {
+    super.initState();
+    db = MyData.instance;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final name = widget.nameCategoria;
+    final newCategory = widget.nameCategoria;
+    controllerManager.newCategory.text = newCategory;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -26,9 +38,9 @@ class _UpdateCategoriaState extends State<UpdateCategoria> {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: controllerManager.newCategory,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    initialValue: name,
                     decoration: const InputDecoration(
                         filled: true, labelText: "Nombre de la categoría"),
                   ),
@@ -36,7 +48,9 @@ class _UpdateCategoriaState extends State<UpdateCategoria> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        final updated = await db
+                            .updateCategory(controllerManager.newCategory.text);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const Nav()),

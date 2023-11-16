@@ -43,8 +43,8 @@ class _ForgetPassState extends State<ForgetPass> {
                   TextFormField(
                     enabled: false,
                     initialValue: dataToSave,
-                    decoration: InputDecoration(
-                        filled: true, labelText: "Ingrese su nombre"),
+                    decoration:
+                        InputDecoration(filled: true, labelText: "Su nombre"),
                   ),
                   SizedBox(height: 40),
                   TextFormField(
@@ -60,11 +60,11 @@ class _ForgetPassState extends State<ForgetPass> {
                         width: MediaQuery.of(context).size.width / 2.4,
                         child: ElevatedButton(
                           onPressed: () async {
-                            final updated = await db.updatePassword(dataToSave,
-                                controllerManager.passwordController.text);
                             final isLoginSuccessful =
                                 await verificarCredenciales(dataToSave,
                                     controllerManager.passwordController.text);
+                            final updated = await db.updatePassword(dataToSave,
+                                controllerManager.passwordController.text);
                             if (isLoginSuccessful) {
                               SessionManager().setLoggedIn(true);
                               Navigator.pushAndRemoveUntil(
