@@ -3,7 +3,21 @@ import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
 
 class UpdateProducto extends StatefulWidget {
-  const UpdateProducto({Key? key}) : super(key: key);
+  final String image;
+  final String serialNumber;
+  final String category;
+  final String name;
+  final int quantity;
+  final double price;
+  const UpdateProducto(
+      {Key? key,
+      required this.image,
+      required this.serialNumber,
+      required this.category,
+      required this.name,
+      required this.quantity,
+      required this.price})
+      : super(key: key);
 
   @override
   _UpdateProductoState createState() => _UpdateProductoState();
@@ -21,6 +35,12 @@ class _UpdateProductoState extends State<UpdateProducto> {
   ];
   @override
   Widget build(BuildContext context) {
+    final image = widget.image;
+    final serialNumber = widget.serialNumber;
+    final category = widget.category;
+    final name = widget.name;
+    final quantity = widget.quantity;
+    final price = widget.price;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -34,11 +54,9 @@ class _UpdateProductoState extends State<UpdateProducto> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 3,
+                    height: MediaQuery.of(context).size.height / 2,
                     child: CustomCardAdd(
-                      onImageSelected: (imagePath) {
-                        debugPrint('Ruta de la imagen: $imagePath');
-                      },
+                      onImageSelected: (imagePath) {},
                     ),
                   ),
                   SizedBox(height: 32),
@@ -48,7 +66,7 @@ class _UpdateProductoState extends State<UpdateProducto> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          initialValue: "123456789",
+                          initialValue: serialNumber,
                           decoration: InputDecoration(
                               filled: true, labelText: "Num. de serie"),
                         ),
@@ -94,7 +112,7 @@ class _UpdateProductoState extends State<UpdateProducto> {
                   TextFormField(
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    initialValue: "Llave perico",
+                    initialValue: name,
                     decoration:
                         InputDecoration(filled: true, labelText: "Nombre"),
                   ),
@@ -105,7 +123,7 @@ class _UpdateProductoState extends State<UpdateProducto> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          initialValue: "10",
+                          initialValue: quantity.toString(),
                           decoration: InputDecoration(
                             filled: true,
                             labelText: "Cantidad",
@@ -116,7 +134,7 @@ class _UpdateProductoState extends State<UpdateProducto> {
                       Expanded(
                         child: TextFormField(
                           keyboardType: TextInputType.number,
-                          initialValue: "400",
+                          initialValue: price.toString(),
                           decoration: InputDecoration(
                             filled: true,
                             labelText: "Precio",

@@ -84,9 +84,10 @@ class _AddProductoState extends State<AddProducto> {
                               setState(
                                 () {
                                   if (res is String) {
-                                    controllerManager.codeController.text = res;
+                                    controllerManager.numSeriePController.text =
+                                        res;
                                     print(
-                                        "Codigo ${controllerManager.codeController.text}");
+                                        "Codigo ${controllerManager.numSeriePController.text}");
                                   }
                                 },
                               );

@@ -3,7 +3,22 @@ import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
 
 class ViewProductos extends StatefulWidget {
-  const ViewProductos({Key? key}) : super(key: key);
+  final String image;
+  final String serialNumber;
+  final String category;
+  final String name;
+  final int quantity;
+  final double price;
+
+  const ViewProductos(
+      {Key? key,
+      required this.image,
+      required this.serialNumber,
+      required this.category,
+      required this.name,
+      required this.quantity,
+      required this.price})
+      : super(key: key);
 
   @override
   _ViewProductosState createState() => _ViewProductosState();
@@ -21,6 +36,12 @@ class _ViewProductosState extends State<ViewProductos> {
   ];
   @override
   Widget build(BuildContext context) {
+    final image = widget.image;
+    final serialNumber = widget.serialNumber;
+    final category = widget.category;
+    final name = widget.name;
+    final quantity = widget.quantity;
+    final price = widget.price;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -31,7 +52,16 @@ class _ViewProductosState extends State<ViewProductos> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => UpdateProducto()),
+                      MaterialPageRoute(
+                        builder: (context) => UpdateProducto(
+                          image: image,
+                          serialNumber: serialNumber,
+                          category: category,
+                          name: name,
+                          quantity: quantity,
+                          price: price,
+                        ),
+                      ),
                     );
                   },
                   icon: Icon(Icons.edit_outlined)),
@@ -45,8 +75,10 @@ class _ViewProductosState extends State<ViewProductos> {
                 children: [
                   Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 3,
-                      child: CardView()),
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: CardView(
+                        image: image,
+                      )),
                   SizedBox(height: 32),
                   Row(
                     children: [
@@ -54,7 +86,7 @@ class _ViewProductosState extends State<ViewProductos> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          initialValue: "123456789",
+                          initialValue: serialNumber,
                           enabled: false,
                           decoration: InputDecoration(
                               filled: true, labelText: "Num. de serie"),
@@ -69,7 +101,7 @@ class _ViewProductosState extends State<ViewProductos> {
                       return DropdownMenuItem<String>(
                         value: option,
                         child: Text(
-                          option,
+                          category,
                           style: TextStyle(
                             color: Color(0xFF9198AB),
                           ),
@@ -85,7 +117,7 @@ class _ViewProductosState extends State<ViewProductos> {
                   TextFormField(
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    initialValue: "Llave perico",
+                    initialValue: name,
                     enabled: false,
                     decoration:
                         InputDecoration(filled: true, labelText: "Nombre"),
@@ -97,7 +129,7 @@ class _ViewProductosState extends State<ViewProductos> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          initialValue: "10",
+                          initialValue: quantity.toString(),
                           enabled: false,
                           decoration: InputDecoration(
                             filled: true,
@@ -109,7 +141,7 @@ class _ViewProductosState extends State<ViewProductos> {
                       Expanded(
                         child: TextFormField(
                           keyboardType: TextInputType.number,
-                          initialValue: "400",
+                          initialValue: price.toString(),
                           enabled: false,
                           decoration: InputDecoration(
                             filled: true,

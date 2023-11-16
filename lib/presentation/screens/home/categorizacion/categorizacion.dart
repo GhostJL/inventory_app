@@ -226,7 +226,14 @@ class _ProductsItems extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ViewProductos(),
+          builder: (context) => ViewProductos(
+            image: productsItems.image,
+            serialNumber: productsItems.serialNumber,
+            category: productsItems.category,
+            name: productsItems.name,
+            quantity: productsItems.quantity,
+            price: productsItems.price,
+          ),
         ),
       ),
     );
