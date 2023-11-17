@@ -216,7 +216,7 @@ class _ProductsItems extends StatelessWidget {
           builder: (context) => ViewProductos(
             image: productsItems.image,
             serialNumber: productsItems.serialNumber,
-            category: productsItems.category,
+            category: productsItems.category_id.toString(),
             name: productsItems.name,
             quantity: productsItems.quantity,
             price: productsItems.price,

@@ -114,7 +114,7 @@ class _CategorizacionState extends State<Categorizacion> {
                       SliverToBoxAdapter(
                         child: Center(
                           child: Text(
-                            "Herramientas",
+                            name,
                             style: TextStyle(
                               color: Color(0xFF9198AB),
                             ),
@@ -229,7 +229,7 @@ class _ProductsItems extends StatelessWidget {
           builder: (context) => ViewProductos(
             image: productsItems.image,
             serialNumber: productsItems.serialNumber,
-            category: productsItems.category,
+            category: productsItems.category_id.toString(),
             name: productsItems.name,
             quantity: productsItems.quantity,
             price: productsItems.price,

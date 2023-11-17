@@ -51,11 +51,13 @@ class MyData {
             image TEXT,
             serialNumber TEXT,
             name TEXT,
-            category TEXT,
+            category_id INTEGER,  -- Cambiado a un campo de tipo INTEGER
             quantity INTEGER,
-            price REAL
+            price REAL,
+            FOREIGN KEY (category_id) REFERENCES $tableCategories(id)  -- Clave foránea
           )
         ''');
+
     await db.execute('''
           CREATE TABLE $tableCategories (
             id INTEGER PRIMARY KEY,
@@ -130,11 +132,28 @@ class MyData {
       return ProductsItems(
           image: maps[i]['image'],
           serialNumber: maps[i]['serialNumber'],
-          category: maps[i]['category'],
+          category_id: maps[i]['category_id'],
           name: maps[i]['name'],
           quantity: maps[i]['quantity'],
           price: maps[i]['price']);
     });
+  }
+
+  Future<int?> getCategoryIdByName(String categoryName) async {
+    final Database db = await instance.database;
+
+    List<Map<String, dynamic>> result = await db.query(
+      tableCategories,
+      columns: ['id'],
+      where: 'name = ?',
+      whereArgs: [categoryName],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first['id'] as int;
+    } else {
+      return null; // No se encontró ninguna categoría con ese nombre
+    }
   }
 
   //Actualizar datos

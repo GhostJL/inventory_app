@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
+import 'package:inventory_app/services/bd.dart';
 
 class ViewProductos extends StatefulWidget {
   final String image;
@@ -34,6 +35,7 @@ class _ViewProductosState extends State<ViewProductos> {
     'Refacción',
     'Pisos'
   ];
+
   @override
   Widget build(BuildContext context) {
     final image = widget.image;

@@ -44,16 +44,20 @@ class _AddProductoState extends State<AddProducto> {
     });
   }
 
-  Future<void> addProduct(String image, String serialNumber, String category,
+  Future<void> addProduct(String image, String serialNumber, int category_id,
       String name, int quantity, double price) async {
     final item = ProductsItems(
         image: image,
         serialNumber: serialNumber,
-        category: category,
+        category_id: category_id,
         name: name,
         quantity: quantity,
         price: price);
     await MyData.instance.insertProducts(item);
+  }
+
+  Future<void> obtenerYMostrarCategoryId() async {
+    String categoryNameToSearch = 'Herramientas';
   }
 
   @override
@@ -187,7 +191,7 @@ class _AddProductoState extends State<AddProducto> {
                   Container(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (controllerManager.categoriePController.text ==
                             'Selecciona una categoría') {
                           showDialog(
@@ -207,11 +211,15 @@ class _AddProductoState extends State<AddProducto> {
                             },
                           );
                         } else {
+                          int? categoryId = await MyData.instance
+                              .getCategoryIdByName(
+                                  controllerManager.categoriePController.text);
+
                           print(controllerManager.categoriePController);
                           addProduct(
                             controllerManager.imagePController.text,
                             controllerManager.numSeriePController.text,
-                            controllerManager.categoriePController.text,
+                            categoryId!,
                             controllerManager.namePController.text,
                             int.tryParse(controllerManager
                                     .cantidadPController.text) ??
