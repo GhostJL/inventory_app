@@ -139,6 +139,7 @@ class MyData {
     });
   }
 
+  //El nombre devuelve un id
   Future<int?> getCategoryIdByName(String categoryName) async {
     final Database db = await instance.database;
 
@@ -149,11 +150,20 @@ class MyData {
       whereArgs: [categoryName],
     );
 
-    if (result.isNotEmpty) {
-      return result.first['id'] as int;
-    } else {
-      return null; // No se encontró ninguna categoría con ese nombre
-    }
+    return result.first['id'];
+  }
+
+  //El id devuelve el nombre
+  Future<String?> getCategoryNameById(String category_id) async {
+    final Database db = await instance.database;
+
+    List<Map<String, dynamic>> result = await db.query(
+      tableCategories,
+      columns: ['name'],
+      where: 'id = ?',
+      whereArgs: [category_id],
+    );
+    return result.first['name'];
   }
 
   //Actualizar datos
@@ -176,11 +186,13 @@ class MyData {
     );
   }
 
-  Future<int> updateCategory(String newCategory) async {
+  Future<int> updateCategory(int oldCategory, String newCategory) async {
     final db = await instance.database;
     return await db.update(
       tableCategories,
       {'name': newCategory},
+      where: 'id = ?',
+      whereArgs: [oldCategory],
     );
   }
 }

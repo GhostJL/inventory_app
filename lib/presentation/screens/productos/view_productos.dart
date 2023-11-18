@@ -27,6 +27,8 @@ class ViewProductos extends StatefulWidget {
 
 class _ViewProductosState extends State<ViewProductos> {
   String? _selectedOption = 'Herramientas';
+  String? categoryId = "";
+
   List<String> list = <String>[
     'Selecciona una familia',
     'Plomeria',
@@ -35,6 +37,20 @@ class _ViewProductosState extends State<ViewProductos> {
     'Refacción',
     'Pisos'
   ];
+  @override
+  void initState() {
+    super.initState();
+    obtenerYMostrarCategoryId();
+  }
+
+  Future<void> obtenerYMostrarCategoryId() async {
+    String categoryIdToSearch = widget.category;
+
+    String? categoryId =
+        await MyData.instance.getCategoryNameById(categoryIdToSearch);
+
+    print(categoryId);
+  }
 
   @override
   Widget build(BuildContext context) {

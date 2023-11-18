@@ -24,8 +24,8 @@ class _UpdateCategoriaState extends State<UpdateCategoria> {
 
   @override
   Widget build(BuildContext context) {
-    final newCategory = widget.nameCategoria;
-    controllerManager.newCategory.text = newCategory;
+    final oldCategory = widget.nameCategoria;
+    controllerManager.newCategory.text = oldCategory;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -49,8 +49,10 @@ class _UpdateCategoriaState extends State<UpdateCategoria> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        final updated = await db
-                            .updateCategory(controllerManager.newCategory.text);
+                        int? categoryId = await MyData.instance
+                            .getCategoryIdByName(oldCategory);
+                        final updated = await db.updateCategory(
+                            categoryId!, controllerManager.newCategory.text);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const Nav()),

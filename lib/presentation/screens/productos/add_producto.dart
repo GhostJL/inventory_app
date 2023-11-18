@@ -56,10 +56,6 @@ class _AddProductoState extends State<AddProducto> {
     await MyData.instance.insertProducts(item);
   }
 
-  Future<void> obtenerYMostrarCategoryId() async {
-    String categoryNameToSearch = 'Herramientas';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,8 +210,7 @@ class _AddProductoState extends State<AddProducto> {
                           int? categoryId = await MyData.instance
                               .getCategoryIdByName(
                                   controllerManager.categoriePController.text);
-
-                          print(controllerManager.categoriePController);
+                          print(categoryId);
                           addProduct(
                             controllerManager.imagePController.text,
                             controllerManager.numSeriePController.text,
