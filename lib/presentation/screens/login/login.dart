@@ -119,9 +119,10 @@ class _LoginState extends State<Login> {
             SizedBox(height: 70),
             InkWell(
               onTap: () {
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => ForgetPassName()),
+                  (route) => false,
                 );
               },
               child: Text(

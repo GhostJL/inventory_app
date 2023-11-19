@@ -78,7 +78,7 @@ class _ViewCategoriasState extends State<ViewCategorias> {
                       );
                     } else {
                       await MyData.instance.deleteCategory(categoryId);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Nav(),

@@ -17,243 +17,24 @@ class _CategoriasState extends State<Categorias> {
     return FutureBuilder(
         future: MyData.instance.getAllItemsCat(),
         builder: (BuildContext context,
-            AsyncSnapshot<List<CategoriesItem>> snaptshot) {
-          var categoriesItems = snaptshot.data;
-          if (snaptshot.hasData) {
-            List<CategoriesItem> categoriesItems = snaptshot.data!;
-            return categoriesItems.isEmpty
-                ? Scaffold(
-                    body: CustomScrollView(
-                      slivers: [
-                        SliverAppBar(
-                          leading: IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              showSearch(
-                                  context: context,
-                                  delegate:
-                                      SearchDelegateCategory(categoriesItems));
-                            },
-                          ),
-                          centerTitle: true,
-                          title: Text("Categorías"),
-                          actions: <Widget>[
-                            IconButton(
-                              icon: const Icon(Icons.person_2_rounded),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Perfil()),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        SliverToBoxAdapter(
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: MediaQuery.of(context).size.height,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.category,
-                                  size: 48,
-                                  color: Colors.grey,
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  "No hay categorías por mostrar",
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 16),
-                                ),
-                                SizedBox(
-                                  height: 180,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    floatingActionButton: FloatingActionButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddCategoria()),
-                        );
-                      },
-                      child: Icon(
-                        Icons.add_outlined,
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
-                : Scaffold(
-                    body: CustomScrollView(
-                      slivers: [
-                        SliverAppBar(
-                          leading: IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              showSearch(
-                                  context: context,
-                                  delegate:
-                                      SearchDelegateCategory(categoriesItems));
-                            },
-                          ),
-                          centerTitle: true,
-                          title: Text("Categorías"),
-                          actions: <Widget>[
-                            IconButton(
-                              icon: const Icon(Icons.person_2_rounded),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Perfil()),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
-                            childAspectRatio: 1.8,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return _CategoriesItem(categoriesItems[index]);
-                            },
-                            childCount: categoriesItems.length,
-                          ),
-                        ),
-                      ],
-                    ),
-                    floatingActionButton: FloatingActionButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddCategoria()),
-                        );
-                      },
-                      child: Icon(
-                        Icons.add_outlined,
-                        color: Colors.black,
-                      ),
-                    ),
-                  );
-          } else {
-            return Scaffold(
-              body: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    leading: IconButton(
-                        icon: const Icon(Icons.search_rounded),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  '¡Ups!',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors
-                                        .red, // Color rojo para resaltar el mensaje de error
-                                  ),
-                                ),
-                                content: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'No se encontraron categorías.',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text('OK'),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors
-                                          .blue, // Color azul para el botón OK
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }),
-                    centerTitle: true,
-                    title: Text("Categorías"),
-                    actions: <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.person_2_rounded),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Perfil()),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: MediaQuery.of(context).size.height,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.category,
-                            size: 48,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            "No hay categorías por mostrar",
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                          ),
-                          SizedBox(
-                            height: 180,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddCategoria()),
-                  );
-                },
-                child: Icon(
-                  Icons.add_outlined,
-                  color: Colors.black,
-                ),
-              ),
+            AsyncSnapshot<List<CategoriesItem>> snapshot) {
+          var categoriesItems = snapshot.data;
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            List<CategoriesItem> categoriesItems = snapshot.data!;
+
+            if (categoriesItems.isEmpty) {
+              return _buildEmptyListWidgetCats(context, categoriesItems);
+            } else {
+              return _buildListWidgetCats(context, categoriesItems);
+            }
+          } else {
+            return _buildErrorWidgetCats(context);
           }
         });
   }
@@ -349,6 +130,7 @@ class SearchDelegateCategory extends SearchDelegate<String> {
             category.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
+    final limitedList = suggestionList.take(10).toList();
     return ListView.builder(
       itemCount: suggestionList.length,
       itemBuilder: (context, index) {
@@ -364,4 +146,160 @@ class SearchDelegateCategory extends SearchDelegate<String> {
       },
     );
   }
+}
+
+Widget _buildEmptyListWidgetCats(
+    BuildContext context, List<CategoriesItem> categoriesItems) {
+  return Scaffold(
+    body: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          leading: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: SearchDelegateCategory(categoriesItems));
+            },
+          ),
+          centerTitle: true,
+          title: Text("Categorías"),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.person_2_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Perfil()),
+                );
+              },
+            ),
+          ],
+        ),
+        SliverToBoxAdapter(
+          child: Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.category,
+                  size: 48,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  "No hay categorías por mostrar",
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+                SizedBox(
+                  height: 180,
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddCategoria()),
+        );
+      },
+      child: Icon(
+        Icons.add_outlined,
+        color: Colors.black,
+      ),
+    ),
+  );
+}
+
+Widget _buildListWidgetCats(
+    BuildContext context, List<CategoriesItem> categoriesItems) {
+  return Scaffold(
+    body: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          leading: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: SearchDelegateCategory(categoriesItems));
+            },
+          ),
+          centerTitle: true,
+          title: Text("Categorías"),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.person_2_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Perfil()),
+                );
+              },
+            ),
+          ],
+        ),
+        SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 8.0,
+            childAspectRatio: 1.8,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _CategoriesItem(categoriesItems[index]);
+            },
+            childCount: categoriesItems.length,
+          ),
+        ),
+      ],
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddCategoria()),
+        );
+      },
+      child: Icon(
+        Icons.add_outlined,
+        color: Colors.black,
+      ),
+    ),
+  );
+}
+
+Widget _buildErrorWidgetCats(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: Text('Se produjo un error al cargar las categorías.'),
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AddProducto()),
+        );
+      },
+      child: Icon(
+        Icons.add_outlined,
+        color: Colors.black,
+      ),
+    ),
+  );
+}
+
+Future<List<CategoriesItem>> fetchDataCats() async {
+  await Future.delayed(Duration(milliseconds: 300));
+  final data = await MyData.instance.getAllItemsCat();
+  return data;
 }

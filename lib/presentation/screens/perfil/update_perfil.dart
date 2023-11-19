@@ -27,9 +27,10 @@ class _UpdatePerfilState extends State<UpdatePerfil> {
 
     if (newPassword.isNotEmpty && newName.isNotEmpty) {
       await db.updateProfile(newName, newPassword);
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => Perfil()),
+        (route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

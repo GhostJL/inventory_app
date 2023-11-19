@@ -15,236 +15,26 @@ class _ProductosState extends State<Productos> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: MyData.instance.getAllItemsProds(),
+      future: fetchDataProds(),
       builder:
           (BuildContext context, AsyncSnapshot<List<ProductsItems>> snapshot) {
         var productsItems = snapshot.data;
-        if (snapshot.hasData) {
-          List<ProductsItems> productsItems = snapshot.data!;
-          return productsItems.isEmpty
-              ? Scaffold(
-                  body: CustomScrollView(
-                    slivers: [
-                      SliverAppBar(
-                        leading: IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () {
-                            showSearch(
-                                context: context,
-                                delegate:
-                                    SearchDelegateProducts(productsItems));
-                          },
-                        ),
-                        centerTitle: true,
-                        title: Text("Productos"),
-                        actions: [
-                          IconButton(
-                            icon: const Icon(Icons.person_2_rounded),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Perfil()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      SliverToBoxAdapter(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: MediaQuery.of(context).size.height,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.shopping_bag,
-                                size: 48,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                "No hay productos por mostrar",
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 16),
-                              ),
-                              SizedBox(
-                                height: 180,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddProducto()),
-                      );
-                    },
-                    child: Icon(
-                      Icons.add_outlined,
-                      color: Colors.black,
-                    ),
-                  ),
-                )
-              : Scaffold(
-                  body: CustomScrollView(
-                    slivers: [
-                      SliverAppBar(
-                        leading: IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () {
-                            showSearch(
-                                context: context,
-                                delegate:
-                                    SearchDelegateProducts(productsItems));
-                          },
-                        ),
-                        centerTitle: true,
-                        title: Text("Productos"),
-                        actions: [
-                          IconButton(
-                            icon: const Icon(Icons.person_2_rounded),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Perfil()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            return _ProductsItems(productsItems[index]);
-                          },
-                          childCount: productsItems.length,
-                        ),
-                      ),
-                    ],
-                  ),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddProducto()),
-                      );
-                    },
-                    child: Icon(
-                      Icons.add_outlined,
-                      color: Colors.black,
-                    ),
-                  ),
-                );
-        } else {
-          return Scaffold(
-            body: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  leading: IconButton(
-                      icon: const Icon(Icons.search_rounded),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(
-                                '¡Ups!',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors
-                                      .red, // Color rojo para resaltar el mensaje de error
-                                ),
-                              ),
-                              content: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'No se encontraron productos.',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('OK'),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors
-                                        .blue, // Color azul para el botón OK
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }),
-                  centerTitle: true,
-                  title: Text("Productos"),
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.person_2_rounded),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Perfil()),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.shopping_bag,
-                          size: 48,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          "No hay productos por mostrar",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 180,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddProducto()),
-                );
-              },
-              child: Icon(
-                Icons.add_outlined,
-                color: Colors.black,
-              ),
-            ),
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
           );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          List<ProductsItems> productsItems = snapshot.data!;
+
+          if (productsItems.isEmpty) {
+            return _buildEmptyListWidgetProds(context, productsItems);
+          } else {
+            return _buildListWidgetProds(context, productsItems);
+          }
+        } else {
+          return _buildErrorWidgetProds(context);
         }
       },
     );
@@ -332,7 +122,7 @@ class SearchDelegateProducts extends SearchDelegate<String> {
         .where((product) =>
             product.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
-
+    final limitedList = suggestionList.take(10).toList();
     return ListView.builder(
       itemCount: suggestionList.length,
       itemBuilder: (context, index) {
@@ -348,4 +138,154 @@ class SearchDelegateProducts extends SearchDelegate<String> {
       },
     );
   }
+}
+
+Widget _buildEmptyListWidgetProds(
+    BuildContext context, List<ProductsItems> productsItems) {
+  return Scaffold(
+    body: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          leading: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: SearchDelegateProducts(productsItems));
+            },
+          ),
+          centerTitle: true,
+          title: Text("Productos"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person_2_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Perfil()),
+                );
+              },
+            ),
+          ],
+        ),
+        SliverToBoxAdapter(
+          child: Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.shopping_bag,
+                  size: 48,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  "No hay productos por mostrar",
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+                SizedBox(
+                  height: 180,
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddProducto()),
+        );
+      },
+      child: Icon(
+        Icons.add_outlined,
+        color: Colors.black,
+      ),
+    ),
+  );
+}
+
+Widget _buildListWidgetProds(
+    BuildContext context, List<ProductsItems> productsItems) {
+  return Scaffold(
+    body: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          leading: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: SearchDelegateProducts(productsItems));
+            },
+          ),
+          centerTitle: true,
+          title: Text("Productos"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person_2_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Perfil()),
+                );
+              },
+            ),
+          ],
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _ProductsItems(productsItems[index]);
+            },
+            childCount: productsItems.length,
+          ),
+        ),
+      ],
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddProducto()),
+        );
+      },
+      child: Icon(
+        Icons.add_outlined,
+        color: Colors.black,
+      ),
+    ),
+  );
+}
+
+Widget _buildErrorWidgetProds(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: Text('Se produjo un error al cargar los productos.'),
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddProducto()),
+        );
+      },
+      child: Icon(
+        Icons.add_outlined,
+        color: Colors.black,
+      ),
+    ),
+  );
+}
+
+Future<List<ProductsItems>> fetchDataProds() async {
+  await Future.delayed(Duration(milliseconds: 300));
+  final data = await MyData.instance.getAllItemsProds();
+  return data;
 }
