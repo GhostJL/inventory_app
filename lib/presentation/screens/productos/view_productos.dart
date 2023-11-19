@@ -83,7 +83,20 @@ class _ViewProductosState extends State<ViewProductos> {
                     );
                   },
                   icon: Icon(Icons.edit_outlined)),
-              IconButton(onPressed: () {}, icon: Icon(Icons.delete))
+              IconButton(
+                  onPressed: () async {
+                    int? productId =
+                        await MyData.instance.getProductIdByName(name);
+                    print(productId);
+                    await MyData.instance.deleteProducts(productId!);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Nav(),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.delete))
             ],
           ),
           SliverToBoxAdapter(

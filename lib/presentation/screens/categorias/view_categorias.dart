@@ -35,7 +35,6 @@ class _ViewCategoriasState extends State<ViewCategorias> {
                   icon: Icon(Icons.edit)),
               IconButton(
                   onPressed: () async {
-                    MyData db;
                     int? categoryId =
                         await MyData.instance.getCategoryIdByName(name);
                     print(categoryId);

@@ -152,6 +152,20 @@ class MyData {
   }
 
   //El nombre devuelve un id
+  Future<int?> getProductIdByName(String productName) async {
+    final Database db = await instance.database;
+
+    List<Map<String, dynamic>> result = await db.query(
+      tableProducts,
+      columns: ['id'],
+      where: 'name = ?',
+      whereArgs: [productName],
+    );
+
+    return result.first['id'];
+  }
+
+  //El nombre devuelve un id
   Future<int?> getCategoryIdByName(String categoryName) async {
     final Database db = await instance.database;
 
@@ -213,6 +227,15 @@ class MyData {
     final db = await instance.database;
     return await db.delete(
       tableCategories,
+      where: "id = ?",
+      whereArgs: [id],
+    );
+  }
+
+  Future<int?> deleteProducts(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableProducts,
       where: "id = ?",
       whereArgs: [id],
     );
