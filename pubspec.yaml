@@ -11,9 +11,11 @@ dependencies:
     sdk: flutter
   google_fonts: ^4.0.4
   image_picker: ^1.0.4
+  path_provider: ^2.1.1
   shared_preferences: ^2.2.2
   simple_barcode_scanner: ^0.0.8
   sqflite: ^2.2.8+4
+  uuid: ^4.1.0
 
 dev_dependencies:
   flutter_test:

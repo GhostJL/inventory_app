@@ -105,6 +105,18 @@ class MyData {
     return result.isNotEmpty;
   }
 
+  Future<bool?> verifyCategoryProducts(int id) async {
+    final db = await instance.database;
+
+    List<Map<String, dynamic>> result = await db.query(
+      tableProducts,
+      columns: ['category_id'],
+      where: 'category_id = ?',
+      whereArgs: [id],
+    );
+    return result.isNotEmpty;
+  }
+
   Future<String> getUserName() async {
     final db = await instance.database;
     final List<Map<String, dynamic>> result = await db.query(
@@ -193,6 +205,16 @@ class MyData {
       {'name': newCategory},
       where: 'id = ?',
       whereArgs: [oldCategory],
+    );
+  }
+
+  //Eliminaciones
+  Future<int?> deleteCategory(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableCategories,
+      where: "id = ?",
+      whereArgs: [id],
     );
   }
 }

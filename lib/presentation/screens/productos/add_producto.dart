@@ -22,6 +22,7 @@ class _AddProductoState extends State<AddProducto> {
   void initState() {
     super.initState();
     cargarCategoriasDesdeBaseDeDatos();
+    controllerManager.categoriePController.text = 'Selecciona una categoría';
   }
 
   Future<void> cargarCategoriasDesdeBaseDeDatos() {
@@ -58,6 +59,7 @@ class _AddProductoState extends State<AddProducto> {
 
   @override
   Widget build(BuildContext context) {
+    print(controllerManager.categoriePController.text);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -105,8 +107,6 @@ class _AddProductoState extends State<AddProducto> {
                                   if (res is String) {
                                     controllerManager.numSeriePController.text =
                                         res;
-                                    print(
-                                        "Codigo ${controllerManager.numSeriePController.text}");
                                   }
                                 },
                               );
@@ -194,9 +194,15 @@ class _AddProductoState extends State<AddProducto> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Advertencia'),
+                                title: Text(
+                                  '¡Ups!',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
                                 content: Text(
-                                    'Selecciona una opción válida antes de continuar.'),
+                                    'Por favor, selecciona una opción válida antes de continuar.'),
                                 actions: [
                                   ElevatedButton(
                                     onPressed: () => Navigator.pop(context),
@@ -223,7 +229,6 @@ class _AddProductoState extends State<AddProducto> {
                                     controllerManager.pricePController.text) ??
                                 0.0,
                           );
-
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               duration: Duration(seconds: 1),

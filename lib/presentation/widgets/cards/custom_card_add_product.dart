@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
+
+final _uuid = Uuid();
 
 class CustomCardAdd extends StatefulWidget {
   final ValueChanged<String> onImageSelected;
@@ -54,11 +58,28 @@ class _CustomCardAddState extends State<CustomCardAdd> {
     );
 
     if (image != null) {
+      String uniqueFileName = "${_uuid.v4()}.jpg";
+      await _saveImageToPath(image.path, uniqueFileName);
+
       setState(() {
         imagePath = image.path;
       });
-      widget.onImageSelected(image.path);
     }
+  }
+
+  Future<void> _saveImageToPath(String imagePath, String fileName) async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+
+    if (!Directory("${appDocDir.path}/Productos").existsSync()) {
+      Directory("${appDocDir.path}/Productos").createSync(recursive: true);
+    }
+
+    String targetPath = "${appDocDir.path}/Productos/$fileName";
+
+    File(imagePath).copySync(targetPath);
+    widget.onImageSelected(targetPath);
+
+    print("Imagen guardada en: $targetPath");
   }
 
   @override

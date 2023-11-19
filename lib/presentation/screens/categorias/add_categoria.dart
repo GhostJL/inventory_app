@@ -47,11 +47,11 @@ class _AddCategoriaState extends State<AddCategoria> {
                             controllerManager.categorieController.text);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            duration: Duration(seconds: 2),
+                            duration: Duration(seconds: 1),
                             behavior: SnackBarBehavior.floating,
                             content: Text('Categoria registrada'),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                           ),
                         );
