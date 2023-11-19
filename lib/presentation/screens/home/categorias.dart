@@ -27,8 +27,14 @@ class _CategoriasState extends State<Categorias> {
                       slivers: [
                         SliverAppBar(
                           leading: IconButton(
-                              icon: const Icon(Icons.search_rounded),
-                              onPressed: () {}),
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              showSearch(
+                                  context: context,
+                                  delegate:
+                                      SearchDelegateCategory(categoriesItems));
+                            },
+                          ),
                           centerTitle: true,
                           title: Text("Categorías"),
                           actions: <Widget>[
@@ -92,8 +98,14 @@ class _CategoriasState extends State<Categorias> {
                       slivers: [
                         SliverAppBar(
                           leading: IconButton(
-                              icon: const Icon(Icons.search_rounded),
-                              onPressed: () {}),
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              showSearch(
+                                  context: context,
+                                  delegate:
+                                      SearchDelegateCategory(categoriesItems));
+                            },
+                          ),
                           centerTitle: true,
                           title: Text("Categorías"),
                           actions: <Widget>[
@@ -147,7 +159,46 @@ class _CategoriasState extends State<Categorias> {
                   SliverAppBar(
                     leading: IconButton(
                         icon: const Icon(Icons.search_rounded),
-                        onPressed: () {}),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(
+                                  '¡Ups!',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors
+                                        .red, // Color rojo para resaltar el mensaje de error
+                                  ),
+                                ),
+                                content: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'No se encontraron categorías.',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('OK'),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors
+                                          .blue, // Color azul para el botón OK
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }),
                     centerTitle: true,
                     title: Text("Categorías"),
                     actions: <Widget>[
@@ -234,6 +285,83 @@ class _CategoriesItem extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SearchDelegateCategory extends SearchDelegate<String> {
+  final List<CategoriesItem> categoryList;
+
+  SearchDelegateCategory(this.categoryList);
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final filteredCategories = categoryList.where((category) =>
+        category.name.toLowerCase().contains(query.toLowerCase()));
+
+    return CustomScrollView(
+      slivers: [
+        SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 8.0,
+            childAspectRatio: 1.8,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final category = filteredCategories.elementAt(index);
+              return _CategoriesItem(category);
+            },
+            childCount: filteredCategories.length,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = categoryList
+        .where((category) =>
+            category.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final suggestion = suggestionList[index];
+        return ListTile(
+          title: Text(suggestion.name),
+          onTap: () {
+            query = suggestion.name;
+
+            showResults(context);
+          },
+        );
+      },
     );
   }
 }

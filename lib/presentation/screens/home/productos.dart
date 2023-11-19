@@ -31,7 +31,8 @@ class _ProductosState extends State<Productos> {
                           onPressed: () {
                             showSearch(
                                 context: context,
-                                delegate: CustomSearchDelegate(productsItems));
+                                delegate:
+                                    SearchDelegateProducts(productsItems));
                           },
                         ),
                         centerTitle: true,
@@ -100,7 +101,8 @@ class _ProductosState extends State<Productos> {
                           onPressed: () {
                             showSearch(
                                 context: context,
-                                delegate: CustomSearchDelegate(productsItems));
+                                delegate:
+                                    SearchDelegateProducts(productsItems));
                           },
                         ),
                         centerTitle: true,
@@ -147,7 +149,47 @@ class _ProductosState extends State<Productos> {
               slivers: [
                 SliverAppBar(
                   leading: IconButton(
-                      icon: const Icon(Icons.search_rounded), onPressed: () {}),
+                      icon: const Icon(Icons.search_rounded),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                '¡Ups!',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors
+                                      .red, // Color rojo para resaltar el mensaje de error
+                                ),
+                              ),
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'No se encontraron productos.',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('OK'),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors
+                                        .blue, // Color azul para el botón OK
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }),
                   centerTitle: true,
                   title: Text("Productos"),
                   actions: [
@@ -237,10 +279,10 @@ class _ProductsItems extends StatelessWidget {
   }
 }
 
-class CustomSearchDelegate extends SearchDelegate<String> {
+class SearchDelegateProducts extends SearchDelegate<String> {
   final List<ProductsItems> productsList;
 
-  CustomSearchDelegate(this.productsList);
+  SearchDelegateProducts(this.productsList);
 
   @override
   List<Widget>? buildActions(BuildContext context) {
