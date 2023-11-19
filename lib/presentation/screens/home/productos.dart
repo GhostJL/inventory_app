@@ -27,8 +27,13 @@ class _ProductosState extends State<Productos> {
                     slivers: [
                       SliverAppBar(
                         leading: IconButton(
-                            icon: const Icon(Icons.search_rounded),
-                            onPressed: () {}),
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            showSearch(
+                                context: context,
+                                delegate: CustomSearchDelegate(productsItems));
+                          },
+                        ),
                         centerTitle: true,
                         title: Text("Productos"),
                         actions: [
@@ -91,8 +96,13 @@ class _ProductosState extends State<Productos> {
                     slivers: [
                       SliverAppBar(
                         leading: IconButton(
-                            icon: const Icon(Icons.search_rounded),
-                            onPressed: () {}),
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            showSearch(
+                                context: context,
+                                delegate: CustomSearchDelegate(productsItems));
+                          },
+                        ),
                         centerTitle: true,
                         title: Text("Productos"),
                         actions: [
@@ -223,6 +233,77 @@ class _ProductsItems extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate<String> {
+  final List<ProductsItems> productsList;
+
+  CustomSearchDelegate(this.productsList);
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final filteredProducts = productsList.where(
+        (product) => product.name.toLowerCase().contains(query.toLowerCase()));
+
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final product = filteredProducts.elementAt(index);
+              return _ProductsItems(product);
+            },
+            childCount: filteredProducts.length,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = productsList
+        .where((product) =>
+            product.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final suggestion = suggestionList[index];
+        return ListTile(
+          title: Text(suggestion.name),
+          onTap: () {
+            query = suggestion.name;
+
+            showResults(context);
+          },
+        );
+      },
     );
   }
 }
