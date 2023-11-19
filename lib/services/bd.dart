@@ -192,6 +192,25 @@ class MyData {
     return result.first['name'];
   }
 
+  Future<List<ProductsItems>> getAllItemsProdsForCat(int category_id) async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableProducts,
+      where: 'category_id = ?',
+      whereArgs: [category_id],
+    );
+
+    return List.generate(maps.length, (i) {
+      return ProductsItems(
+          image: maps[i]['image'],
+          serialNumber: maps[i]['serialNumber'],
+          category_id: maps[i]['category_id'],
+          name: maps[i]['name'],
+          quantity: maps[i]['quantity'],
+          price: maps[i]['price']);
+    });
+  }
+
   //Actualizar datos
   Future<int> updateProfile(String username, String newPassword) async {
     final db = await instance.database;

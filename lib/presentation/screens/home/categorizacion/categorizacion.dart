@@ -14,11 +14,32 @@ class Categorizacion extends StatefulWidget {
 }
 
 class _CategorizacionState extends State<Categorizacion> {
+  int? categoryId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    obtenerCategoryId();
+  }
+
+  void obtenerCategoryId() {
+    final name = widget.nameCategoria;
+
+    MyData.instance.getCategoryIdByName(name).then((int? id) {
+      setState(() {
+        categoryId = id;
+      });
+      print(categoryId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final name = widget.nameCategoria;
+    print(categoryId);
+
     return FutureBuilder(
-      future: MyData.instance.getAllItemsProds(),
+      future: MyData.instance.getAllItemsProdsForCat(categoryId!),
       builder:
           (BuildContext context, AsyncSnapshot<List<ProductsItems>> snapshot) {
         var productsItems = snapshot.data;
@@ -30,8 +51,14 @@ class _CategorizacionState extends State<Categorizacion> {
                     slivers: [
                       SliverAppBar(
                         leading: IconButton(
-                            icon: const Icon(Icons.search_rounded),
-                            onPressed: () {}),
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            showSearch(
+                                context: context,
+                                delegate:
+                                    SearchDelegateProductsCat(productsItems));
+                          },
+                        ),
                         centerTitle: true,
                         title: Text("Productos"),
                         actions: [
@@ -94,8 +121,14 @@ class _CategorizacionState extends State<Categorizacion> {
                     slivers: [
                       SliverAppBar(
                         leading: IconButton(
-                            icon: const Icon(Icons.search_rounded),
-                            onPressed: () {}),
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            showSearch(
+                                context: context,
+                                delegate:
+                                    SearchDelegateProductsCat(productsItems));
+                          },
+                        ),
                         centerTitle: true,
                         title: Text("Productos"),
                         actions: [
@@ -236,6 +269,77 @@ class _ProductsItems extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SearchDelegateProductsCat extends SearchDelegate<String> {
+  final List<ProductsItems> productsList;
+
+  SearchDelegateProductsCat(this.productsList);
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final filteredProducts = productsList.where(
+        (product) => product.name.toLowerCase().contains(query.toLowerCase()));
+
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final product = filteredProducts.elementAt(index);
+              return _ProductsItems(product);
+            },
+            childCount: filteredProducts.length,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = productsList
+        .where((product) =>
+            product.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final suggestion = suggestionList[index];
+        return ListTile(
+          title: Text(suggestion.name),
+          onTap: () {
+            query = suggestion.name;
+
+            showResults(context);
+          },
+        );
+      },
     );
   }
 }
