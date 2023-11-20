@@ -16,7 +16,7 @@ class CardView extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: Image.file(
           File(image),
-          fit: BoxFit.cover,
+          fit: BoxFit.fill,
         ),
       ),
     );

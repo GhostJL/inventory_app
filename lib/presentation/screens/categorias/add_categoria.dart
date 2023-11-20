@@ -47,16 +47,27 @@ class _AddCategoriaState extends State<AddCategoria> {
                             controllerManager.categorieController.text);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            duration: Duration(seconds: 1),
+                            duration: Duration(seconds: 2),
                             behavior: SnackBarBehavior.floating,
-                            content: Text('Categoria registrada'),
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 8.0),
+                                Text('Categoría agregada con éxito.'),
+                              ],
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                           ),
                         );
-                        Navigator.pushReplacement(
-                            context, MaterialPageRoute(builder: (_) => Nav()));
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                        setState(() {
+                          // Puedes dejar este bloque vacío si no necesitas realizar cambios en el estado
+                        });
                       },
                       child: Text("Guardar"),
                     ),

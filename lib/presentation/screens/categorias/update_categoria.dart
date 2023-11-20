@@ -53,9 +53,30 @@ class _UpdateCategoriaState extends State<UpdateCategoria> {
                             .getCategoryIdByName(oldCategory);
                         final updated = await db.updateCategory(
                             categoryId!, controllerManager.newCategory.text);
-                        Navigator.push(
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.amber,
+                                ),
+                                SizedBox(width: 8.0),
+                                Text('Categoría actualizada con éxito.'),
+                              ],
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                        );
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const Nav()),
+                          MaterialPageRoute(
+                            builder: (context) => Nav(),
+                          ),
                         );
                       },
                       child: const Text("Guardar"),

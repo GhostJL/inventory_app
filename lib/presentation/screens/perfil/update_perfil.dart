@@ -27,19 +27,44 @@ class _UpdatePerfilState extends State<UpdatePerfil> {
 
     if (newPassword.isNotEmpty && newName.isNotEmpty) {
       await db.updateProfile(newName, newPassword);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Perfil()),
-        (route) => false,
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          content: Row(
+            children: [
+              Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
+              SizedBox(width: 8.0),
+              Text('Perfil actualizado con éxito.'),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
       );
+      Navigator.popUntil(context, (route) => route.isFirst);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
-          content: Text('Por favor, verifique los campos'),
+          content: Row(
+            children: [
+              Icon(
+                Icons.warning,
+                color: Colors.orange,
+              ),
+              SizedBox(width: 8.0),
+              Text('Por favor, verifique los campos.'),
+            ],
+          ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(16.0),
           ),
         ),
       );

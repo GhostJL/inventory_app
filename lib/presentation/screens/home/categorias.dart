@@ -15,7 +15,7 @@ class _CategoriasState extends State<Categorias> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: MyData.instance.getAllItemsCat(),
+        future: fetchDataCats(),
         builder: (BuildContext context,
             AsyncSnapshot<List<CategoriesItem>> snapshot) {
           var categoriesItems = snapshot.data;
@@ -206,7 +206,7 @@ Widget _buildEmptyListWidgetCats(
     ),
     floatingActionButton: FloatingActionButton(
       onPressed: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => AddCategoria()),
         );

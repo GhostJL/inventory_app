@@ -241,6 +241,17 @@ class MyData {
     );
   }
 
+  Future<void> updateProductWithId(
+      String serialNumber, ProductsItems updatedProduct) async {
+    final db = await instance.database;
+    await db.update(
+      tableProducts,
+      updatedProduct.toMap(),
+      where: 'serialNumber = ?',
+      whereArgs: [serialNumber],
+    );
+  }
+
   //Eliminaciones
   Future<int?> deleteCategory(int id) async {
     final db = await instance.database;

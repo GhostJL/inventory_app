@@ -75,6 +75,16 @@ class _CategorizacionState extends State<Categorizacion> {
                         ],
                       ),
                       SliverToBoxAdapter(
+                        child: Center(
+                          child: Text(
+                            name,
+                            style: TextStyle(
+                              color: Color(0xFF9198AB),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
                         child: Container(
                           alignment: Alignment.center,
                           height: MediaQuery.of(context).size.height,
@@ -90,7 +100,7 @@ class _CategorizacionState extends State<Categorizacion> {
                                 height: 16,
                               ),
                               Text(
-                                "No hay productos por mostrar",
+                                "No hay productos por mostrar.",
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 16),
                               ),

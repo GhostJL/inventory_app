@@ -78,6 +78,25 @@ class _ViewCategoriasState extends State<ViewCategorias> {
                       );
                     } else {
                       await MyData.instance.deleteCategory(categoryId);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                          content: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              ),
+                              SizedBox(width: 8.0),
+                              Text('Categoría eliminada con éxito.'),
+                            ],
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                        ),
+                      );
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -86,7 +105,10 @@ class _ViewCategoriasState extends State<ViewCategorias> {
                       );
                     }
                   },
-                  icon: Icon(Icons.delete))
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ))
             ],
           ),
           SliverToBoxAdapter(

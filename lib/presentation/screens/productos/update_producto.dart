@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
+import 'package:inventory_app/services/bd.dart';
+import 'package:inventory_app/services/controllers_manager.dart';
+import 'package:inventory_app/services/maps/maps.dart';
 
 class UpdateProducto extends StatefulWidget {
   final String image;
@@ -24,23 +27,61 @@ class UpdateProducto extends StatefulWidget {
 }
 
 class _UpdateProductoState extends State<UpdateProducto> {
-  String? _selectedOption = 'Herramientas';
-  List<String> list = <String>[
-    'Selecciona una familia',
-    'Plomeria',
-    'Construcción',
-    'Herramientas',
-    'Refacción',
-    'Pisos'
-  ];
+  final controllerManager = ControllerManager();
+
+  String? _selectedOption;
+  String? categoryId;
+
+  List<String> _categorias = ['Selecciona una categoría'];
+
+  @override
+  void initState() {
+    super.initState();
+    cargarCategoriasDesdeBaseDeDatos();
+    obtenerYMostrarCategoryId();
+    // Inicializa los controllers con los valores iniciales
+    controllerManager.imagePController.text = widget.image;
+    controllerManager.numSeriePController.text = widget.serialNumber;
+    controllerManager.categoriePController.text = widget.category;
+    controllerManager.namePController.text = widget.name;
+    controllerManager.cantidadPController.text = widget.quantity.toString();
+    controllerManager.pricePController.text = widget.price.toString();
+  }
+
+  Future<void> cargarCategoriasDesdeBaseDeDatos() {
+    return MyData.instance
+        .getAllItemsCat()
+        .then((List<CategoriesItem> categoriasLista) {
+      List<String> nombresCategorias =
+          categoriasLista.map((categoria) => categoria.name).toList();
+
+      setState(() {
+        _categorias.addAll(nombresCategorias);
+        if (_categorias.isNotEmpty) {
+          _selectedOption = _categorias[0];
+        } else {
+          print("No se obtuvieron las categorias");
+        }
+      });
+    }).catchError((error) {
+      print('Error al cargar categorías: $error');
+    });
+  }
+
+  Future<void> obtenerYMostrarCategoryId() async {
+    String categoryIdToSearch = widget.category;
+
+    categoryId = await MyData.instance.getCategoryNameById(categoryIdToSearch);
+
+    print("Cate de Prod $categoryId");
+
+    setState(() {
+      _selectedOption = categoryId ?? 'Selecciona una categoría';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final image = widget.image;
-    final serialNumber = widget.serialNumber;
-    final category = widget.category;
-    final name = widget.name;
-    final quantity = widget.quantity;
-    final price = widget.price;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -55,8 +96,12 @@ class _UpdateProductoState extends State<UpdateProducto> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 2,
-                    child: CustomCardAdd(
-                      onImageSelected: (imagePath) {},
+                    child: CardUpdateProducto(
+                      onImageSelected: (imagePath) {
+                        controllerManager.imagePController.text = imagePath;
+                      },
+                      imagePath: controllerManager.imagePController
+                          .text, // Pasa la ruta de la imagen a CustomCardAdd
                     ),
                   ),
                   SizedBox(height: 32),
@@ -64,9 +109,9 @@ class _UpdateProductoState extends State<UpdateProducto> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: controllerManager.numSeriePController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          initialValue: serialNumber,
                           decoration: InputDecoration(
                               filled: true, labelText: "Num. de serie"),
                         ),
@@ -92,7 +137,7 @@ class _UpdateProductoState extends State<UpdateProducto> {
                   SizedBox(height: 32),
                   DropdownButtonFormField<String>(
                     value: _selectedOption,
-                    items: list.map((option) {
+                    items: _categorias.map((option) {
                       return DropdownMenuItem<String>(
                         value: option,
                         child: Text(
@@ -103,16 +148,20 @@ class _UpdateProductoState extends State<UpdateProducto> {
                         ),
                       );
                     }).toList(),
-                    onChanged: null,
+                    onChanged: (newValue) {
+                      setState(() {
+                        controllerManager.categoriePController.text = newValue!;
+                      });
+                    },
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 10.00),
                     ),
                   ),
                   SizedBox(height: 32),
                   TextFormField(
+                    controller: controllerManager.namePController,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    initialValue: name,
                     decoration:
                         InputDecoration(filled: true, labelText: "Nombre"),
                   ),
@@ -121,9 +170,9 @@ class _UpdateProductoState extends State<UpdateProducto> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: controllerManager.cantidadPController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          initialValue: quantity.toString(),
                           decoration: InputDecoration(
                             filled: true,
                             labelText: "Cantidad",
@@ -133,8 +182,8 @@ class _UpdateProductoState extends State<UpdateProducto> {
                       SizedBox(width: 16),
                       Expanded(
                         child: TextFormField(
+                          controller: controllerManager.pricePController,
                           keyboardType: TextInputType.number,
-                          initialValue: price.toString(),
                           decoration: InputDecoration(
                             filled: true,
                             labelText: "Precio",
@@ -149,10 +198,52 @@ class _UpdateProductoState extends State<UpdateProducto> {
                   Container(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 8.0),
+                                Text('Producto actualizado con éxito.'),
+                              ],
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                        );
+
+                        final updatedProduct = ProductsItems(
+                          image: controllerManager.imagePController.text,
+                          serialNumber:
+                              controllerManager.numSeriePController.text,
+                          category_id: int.tryParse(controllerManager
+                                  .categoriePController.text) ??
+                              0,
+                          name: controllerManager.namePController.text,
+                          quantity: int.tryParse(
+                                  controllerManager.cantidadPController.text) ??
+                              0,
+                          price: double.tryParse(
+                                  controllerManager.pricePController.text) ??
+                              0.0,
+                        );
+
+                        await MyData.instance.updateProductWithId(
+                            controllerManager.numSeriePController.text,
+                            updatedProduct);
+
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => Nav()),
+                          MaterialPageRoute(
+                            builder: (context) => Nav(),
+                          ),
                         );
                       },
                       child: Text("Guardar"),

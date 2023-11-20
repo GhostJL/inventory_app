@@ -73,8 +73,12 @@ class _AddProductoState extends State<AddProducto> {
                 children: [
                   CustomCardAdd(
                     onImageSelected: (imagePath) {
-                      controllerManager.imagePController.text = imagePath;
-                      debugPrint('Ruta de la imagen: $imagePath');
+                      print('onImageSelected: $imagePath');
+                      String defaultImagePath = 'assets/default.jpg';
+                      controllerManager.imagePController.text =
+                          imagePath ?? defaultImagePath;
+                      print(
+                          'imagePController: ${controllerManager.imagePController.text}');
                     },
                   ),
                   SizedBox(height: 32),
@@ -231,17 +235,28 @@ class _AddProductoState extends State<AddProducto> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              duration: Duration(seconds: 1),
+                              duration: Duration(seconds: 2),
                               behavior: SnackBarBehavior.floating,
-                              content: Text('Producto registrado'),
+                              content: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Text('Producto agregado con éxito.'),
+                                ],
+                              ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                             ),
                           );
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => Nav()),
+                            MaterialPageRoute(
+                              builder: (context) => Nav(),
+                            ),
                           );
                         }
                       },

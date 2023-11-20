@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
 import 'package:inventory_app/services/bd.dart';
+import 'package:inventory_app/services/controllers_manager.dart';
+import 'package:inventory_app/services/maps/maps.dart';
 
 class ViewProductos extends StatefulWidget {
   final String image;
@@ -26,30 +28,49 @@ class ViewProductos extends StatefulWidget {
 }
 
 class _ViewProductosState extends State<ViewProductos> {
-  String? _selectedOption = 'Herramientas';
-  String? categoryId = "";
+  final controllerManager = ControllerManager();
+  String? _selectedOption;
+  String? categoryId;
 
-  List<String> list = <String>[
-    'Selecciona una familia',
-    'Plomeria',
-    'Construcción',
-    'Herramientas',
-    'Refacción',
-    'Pisos'
-  ];
+  List<String> _categorias = ['Selecciona una categoría'];
+
   @override
   void initState() {
     super.initState();
+    cargarCategoriasDesdeBaseDeDatos();
     obtenerYMostrarCategoryId();
+  }
+
+  Future<void> cargarCategoriasDesdeBaseDeDatos() {
+    return MyData.instance
+        .getAllItemsCat()
+        .then((List<CategoriesItem> categoriasLista) {
+      List<String> nombresCategorias =
+          categoriasLista.map((categoria) => categoria.name).toList();
+
+      setState(() {
+        _categorias.addAll(nombresCategorias);
+        if (_categorias.isNotEmpty) {
+          _selectedOption = _categorias[0];
+        } else {
+          print("No se obtuvieron las categorias");
+        }
+      });
+    }).catchError((error) {
+      print('Error al cargar categorías: $error');
+    });
   }
 
   Future<void> obtenerYMostrarCategoryId() async {
     String categoryIdToSearch = widget.category;
 
-    String? categoryId =
-        await MyData.instance.getCategoryNameById(categoryIdToSearch);
+    categoryId = await MyData.instance.getCategoryNameById(categoryIdToSearch);
 
-    print(categoryId);
+    print("Cate de Prod $categoryId");
+
+    setState(() {
+      _selectedOption = categoryId ?? 'Selecciona una categoría';
+    });
   }
 
   @override
@@ -89,7 +110,26 @@ class _ViewProductosState extends State<ViewProductos> {
                         await MyData.instance.getProductIdByName(name);
                     print(productId);
                     await MyData.instance.deleteProducts(productId!);
-                    Navigator.push(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        duration: Duration(seconds: 2),
+                        behavior: SnackBarBehavior.floating,
+                        content: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                            ),
+                            SizedBox(width: 8.0),
+                            Text('Producto eliminado con éxito.'),
+                          ],
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                      ),
+                    );
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => Nav(),
@@ -128,11 +168,11 @@ class _ViewProductosState extends State<ViewProductos> {
                   SizedBox(height: 32),
                   DropdownButtonFormField<String>(
                     value: _selectedOption,
-                    items: list.map((option) {
+                    items: _categorias.map((option) {
                       return DropdownMenuItem<String>(
                         value: option,
                         child: Text(
-                          category,
+                          option,
                           style: TextStyle(
                             color: Color(0xFF9198AB),
                           ),

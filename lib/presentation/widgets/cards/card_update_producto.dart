@@ -1,52 +1,39 @@
 import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 final _uuid = Uuid();
 
-class CustomCardAdd extends StatefulWidget {
+class CardUpdateProducto extends StatefulWidget {
   final ValueChanged<String> onImageSelected;
   final String? imagePath;
 
-  const CustomCardAdd({
+  const CardUpdateProducto({
     Key? key,
     required this.onImageSelected,
     this.imagePath,
   }) : super(key: key);
 
   @override
-  _CustomCardAddState createState() => _CustomCardAddState();
+  _CardUpdateProductoState createState() => _CardUpdateProductoState();
 }
 
-class _CustomCardAddState extends State<CustomCardAdd> {
+class _CardUpdateProductoState extends State<CardUpdateProducto> {
   String? imagePath;
 
   @override
   void initState() {
     super.initState();
-    // Si widget.imagePath es nulo, carga la imagen predeterminada
-    if (widget.imagePath == null) {
-      _loadDefaultImage();
+    // Verifica si widget.imagePath es null o no
+    if (widget.imagePath != null) {
+      imagePath = widget.imagePath;
+    } else {
+      // Si widget.imagePath es null, usa la ruta de la imagen predeterminada
+      imagePath = 'assets/default.jpg';
     }
-  }
-
-  Future<void> _loadDefaultImage() async {
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final String targetPath = '${appDocDir.path}/Productos/default7.jpg';
-
-    // Copia la imagen predeterminada al directorio de la aplicación
-    final File file = File(targetPath);
-    if (!file.existsSync()) {
-      final ByteData data = await rootBundle.load('assets/default.jpg');
-      final List<int> bytes = data.buffer.asUint8List();
-      await file.writeAsBytes(bytes);
-    }
-
-    widget.onImageSelected(targetPath);
   }
 
   Future<void> _showImageSourceMenu() async {
@@ -86,10 +73,16 @@ class _CustomCardAddState extends State<CustomCardAdd> {
 
     if (image != null) {
       String uniqueFileName = "${_uuid.v4()}.jpg";
-      await _saveImageToPath(image.path, uniqueFileName);
 
       setState(() {
         imagePath = image.path;
+      });
+
+      await _saveImageToPath(image.path, uniqueFileName);
+    } else {
+      // Si image es null, asigna la ruta de la imagen predeterminada
+      setState(() {
+        imagePath = 'assets/default.jpg';
       });
     }
   }
