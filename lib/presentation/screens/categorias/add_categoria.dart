@@ -64,10 +64,12 @@ class _AddCategoriaState extends State<AddCategoria> {
                             ),
                           ),
                         );
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                        setState(() {
-                          // Puedes dejar este bloque vacío si no necesitas realizar cambios en el estado
-                        });
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Nav(),
+                          ),
+                        );
                       },
                       child: Text("Guardar"),
                     ),
