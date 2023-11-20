@@ -70,11 +70,12 @@ class _LoginState extends State<Login> {
           children: [
             Padding(padding: EdgeInsets.all(48)),
             Row(
-              children: const [
-                Text(
-                  "Login",
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                )
+              children: [
+                Image.asset(
+                  'assets/logo.jpeg',
+                  width: 80,
+                  height: 80,
+                ),
               ],
             ),
             Row(

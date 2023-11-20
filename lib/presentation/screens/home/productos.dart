@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_app/presentation/screens/screen.dart';
 import 'package:inventory_app/presentation/widgets/widgets.dart';
 import 'package:inventory_app/services/bd.dart';
+import 'package:inventory_app/services/generator_pdf.dart';
 import 'package:inventory_app/services/maps/maps.dart';
 
 class Productos extends StatefulWidget {
@@ -228,6 +229,11 @@ Widget _buildListWidgetProds(
           centerTitle: true,
           title: Text("Productos"),
           actions: [
+            IconButton(
+                onPressed: () async {
+                  await PdfGenerator.generatePDF();
+                },
+                icon: Icon(Icons.picture_as_pdf)),
             IconButton(
               icon: const Icon(Icons.person_2_rounded),
               onPressed: () {

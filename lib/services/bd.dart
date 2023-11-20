@@ -30,7 +30,8 @@ class MyData {
   }
 
   Future _onCreateDB(Database db, int version) async {
-    await db.execute('''
+    await db.execute(
+        '''
           CREATE TABLE $tableUser (
             id INTEGER PRIMARY KEY,
             username TEXT,
@@ -45,7 +46,8 @@ class MyData {
         'password': 'admin',
       });
     }
-    await db.execute('''
+    await db.execute(
+        '''
           CREATE TABLE $tableProducts (
             id INTEGER PRIMARY KEY,
             image TEXT,
@@ -58,7 +60,8 @@ class MyData {
           )
         ''');
 
-    await db.execute('''
+    await db.execute(
+        '''
           CREATE TABLE $tableCategories (
             id INTEGER PRIMARY KEY,
             name TEXT
@@ -190,6 +193,23 @@ class MyData {
       whereArgs: [category_id],
     );
     return result.first['name'];
+  }
+
+  Future<String?> getCategoryName(int categoryId) async {
+    final Database db = await instance.database;
+
+    List<Map<String, dynamic>> result = await db.query(
+      tableCategories,
+      columns: ['name'],
+      where: 'id = ?',
+      whereArgs: [categoryId],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first['name'];
+    } else {
+      return null; // O 'Sin categoría' si prefieres un valor predeterminado
+    }
   }
 
   Future<List<ProductsItems>> getAllItemsProdsForCat(int category_id) async {
